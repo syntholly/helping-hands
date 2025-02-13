@@ -5,6 +5,7 @@ import drawCardsFromDeck from '@/utilities/drawCardsFromDeck';
 import isLegalDeck from '@/utilities/isLegalDeck';
 import parseDeck from '@/utilities/parseDeck';
 import shuffleDeck from '@/utilities/shuffleDeck';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const RootPage = () => {
     const [deckInput, setDeckInput] = useState('');
@@ -153,18 +154,18 @@ const RootPage = () => {
     const calculateRowColor = (cardsDrawn, remainingCards) => {
         const drawPercentage = (cardsDrawn / remainingCards) * 100;
 
-        if (drawPercentage <= 20) return 'bg-red-300'; // 0-20%
-        if (drawPercentage <= 40) return 'bg-orange-300'; // 21-40%
-        if (drawPercentage <= 60) return 'bg-yellow-300'; // 41-60%
-        if (drawPercentage <= 80) return 'bg-green-300'; // 61-80%
-        return 'bg-blue-300'; // 81-100%
+        if (drawPercentage <= 20) return ''; // 0-20%
+        if (drawPercentage <= 40) return ''; // 21-40%
+        if (drawPercentage <= 60) return ''; // 41-60%
+        if (drawPercentage <= 80) return ''; // 61-80%
+        return ''; // 81-100%
     };
 
     return (
-        <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
+        <div className="container mx-auto p-6  rounded-lg shadow-md">
             <form className="mb-6">
                 <textarea
-                    className="border-2 border-gray-300 p-2 w-full rounded-lg mb-4 bg-white"
+                    className="border-2 border-gray-300 p-2 w-full rounded-lg mb-4"
                     name="deck-drop"
                     id="deck-drop"
                     value={deckInput}
@@ -174,43 +175,43 @@ const RootPage = () => {
                 <div className="flex gap-4">
                     <button
                         type="button"
-                        className="bg-blue-300 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+                        className="bg-blue-300 text-slate-50 py-2 px-4 rounded transition"
                         onClick={handleParseDeck}>
                         Parse Deck
                     </button>
                     <button
                         type="button"
-                        className="bg-green-300 text-white py-2 px-4 rounded hover:bg-green-600 transition"
+                        className="bg-blue-300 text-slate-50 py-2 px-4 rounded transition"
                         onClick={handleIsLegalDeck}>
                         Check Legal Deck
                     </button>
                     <button
                         type="button"
-                        className="bg-purple-300 text-white py-2 px-4 rounded hover:bg-purple-600 transition"
+                        className="bg-lime-400 text-slate-50 py-2 px-4 rounded transition"
                         onClick={() => handleDrawCardsFromDeck(1)}>
                         +1 Card
                     </button>
                     <button
                         type="button"
-                        className="bg-yellow-300 text-white py-2 px-4 rounded hover:bg-yellow-600 transition"
+                        className="bg-lime-400 text-slate-50 py-2 px-4 rounded transition"
                         onClick={() => handleDrawCardsFromDeck(5)}>
                         +5 Cards
                     </button>
                     <button
                         type="button"
-                        className="bg-red-300 text-white py-2 px-4 rounded hover:bg-red-600 transition"
+                        className="bg-lime-500 text-slate-50 py-2 px-4 rounded transition"
                         onClick={() => handleDrawCardsFromDeck(10)}>
                         +10 Cards
                     </button>
                     <button
                         type="button"
-                        className="bg-teal-300 text-white py-2 px-4 rounded hover:bg-teal-600 transition"
+                        className="bg-orange-300 text-slate-50 py-2 px-4 rounded transition"
                         onClick={handleShuffleDeck}>
                         Shuffle Deck
                     </button>
                     <button
                         type="button"
-                        className="bg-indigo-300 text-white py-2 px-4 rounded hover:bg-indigo-600 transition"
+                        className="bg-orange-300 text-slate-50 py-2 px-4 rounded transition"
                         onClick={handleNewTurn}>
                         New Turn
                     </button>
@@ -219,9 +220,9 @@ const RootPage = () => {
 
             <div className="mb-6">
                 <h3 className="text-xl font-semibold mb-4">Turn Stats</h3>
-                <table className="table-auto w-full border-collapse bg-white rounded-lg shadow-md">
+                <table className="table-auto w-full border-collapse rounded-lg shadow-md">
                     <thead>
-                        <tr className="bg-gray-200">
+                        <tr className="">
                             <th className="border px-4 py-2 text-left">Turn</th>
                             <th className="border px-4 py-2 text-left">Cards Drawn</th>
                             <th className="border px-4 py-2 text-left">Cards Discarded</th>
@@ -250,9 +251,9 @@ const RootPage = () => {
 
             <div className="mb-6">
                 <h3 className="text-xl font-semibold mb-4">All Turns Stats</h3>
-                <table className="table-auto w-full border-collapse bg-white rounded-lg shadow-md">
+                <table className="table-auto w-full border-collapse rounded-lg shadow-md">
                     <thead>
-                        <tr className="bg-gray-200">
+                        <tr className="">
                             <th className="border px-4 py-2 text-left">Turn</th>
                             <th className="border px-4 py-2 text-left">Cards Drawn</th>
                             <th className="border px-4 py-2 text-left">Cards Discarded</th>
@@ -278,23 +279,23 @@ const RootPage = () => {
                 <h3 className="text-xl font-semibold mb-4">Current Hand</h3>
                 <div className="flex flex-wrap gap-4">
                     {currentHand.map((card, index) => (
-                        <div key={index} className="border p-4 rounded shadow-lg bg-white">
+                        <div key={index} className="border p-4 rounded shadow-lg">
                             <p>{card}</p> {/* Display the card */}
                             <div className="flex gap-2 mt-2">
                                 <button
-                                    className="bg-red-300 text-white py-1 px-3 rounded hover:bg-red-600 transition"
-                                    onClick={() => handleDiscardCard(index)}>
-                                    Discard
-                                </button>
-                                <button
-                                    className="bg-teal-300 text-white py-1 px-3 rounded hover:bg-teal-600 transition"
+                                    className="bg-lime-600 text-slate-50 py-1 px-3 rounded transition"
                                     onClick={() => handleReturnToDeck(index)}>
                                     Return to Deck & Shuffle
                                 </button>
                                 <button
-                                    className="bg-yellow-300 text-white py-1 px-3 rounded hover:bg-yellow-600 transition"
+                                    className="bg-orange-300 text-slate-50 py-1 px-3 rounded transition"
                                     onClick={() => handleReturnToBottomOfDeck(index)}>
                                     Return to Bottom of Deck
+                                </button>
+                                <button
+                                    className="bg-red-300 text-slate-50 py-1 px-3 rounded transition"
+                                    onClick={() => handleDiscardCard(index)}>
+                                    Discard
                                 </button>
                             </div>
                         </div>
