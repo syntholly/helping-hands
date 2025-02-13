@@ -16,6 +16,8 @@ const RootPage = () => {
     const [currentDiscard, setCurrentDiscard] = useState([]);
     const [currentTurn, setCurrentTurn] = useState(0);
 
+    const [isDeckLegal, setIsDeckLegal] = useState(false);
+
     // Track cards drawn, discarded, returned, and shuffles per turn
     const [cardsDrawn, setCardsDrawn] = useState(0);
     const [cardsDiscarded, setCardsDiscarded] = useState(0);
@@ -44,6 +46,7 @@ const RootPage = () => {
     const handleIsLegalDeck = (event) => {
         event.preventDefault();
         const legal = isLegalDeck(currentDeck);
+        setIsDeckLegal(legal);
         console.log(legal ? 'Deck is legal.' : 'Deck is illegal.');
     };
 
@@ -174,48 +177,57 @@ const RootPage = () => {
                     placeholder="Paste your deck here..."
                 />
                 <div className="flex gap-4">
-                    <button
-                        type="button"
-                        className="bg-blue-300 text-slate-50 py-2 px-4 rounded transition"
-                        onClick={handleParseDeck}>
-                        Parse Deck
-                    </button>
-                    <button
-                        type="button"
-                        className="bg-blue-300 text-slate-50 py-2 px-4 rounded transition"
-                        onClick={handleIsLegalDeck}>
-                        Check Legal Deck
-                    </button>
-                    <button
-                        type="button"
-                        className="bg-lime-400 text-slate-50 py-2 px-4 rounded transition"
-                        onClick={() => handleDrawCardsFromDeck(1)}>
-                        +1 Card
-                    </button>
-                    <button
-                        type="button"
-                        className="bg-lime-400 text-slate-50 py-2 px-4 rounded transition"
-                        onClick={() => handleDrawCardsFromDeck(5)}>
-                        +5 Cards
-                    </button>
-                    <button
-                        type="button"
-                        className="bg-lime-500 text-slate-50 py-2 px-4 rounded transition"
-                        onClick={() => handleDrawCardsFromDeck(10)}>
-                        +10 Cards
-                    </button>
-                    <button
-                        type="button"
-                        className="bg-orange-300 text-slate-50 py-2 px-4 rounded transition"
-                        onClick={handleShuffleDeck}>
-                        Shuffle Deck
-                    </button>
-                    <button
-                        type="button"
-                        className="bg-orange-300 text-slate-50 py-2 px-4 rounded transition"
-                        onClick={handleNewTurn}>
-                        New Turn
-                    </button>
+                    {!currentDeck.length && (
+                        <button
+                            type="button"
+                            className="bg-blue-300 text-slate-50 py-2 px-4 rounded transition"
+                            onClick={handleParseDeck}>
+                            Parse Deck
+                        </button>
+                    )}
+                    {currentDeck.length !== 0 && !isDeckLegal && (
+                        <button
+                            type="button"
+                            className="bg-blue-300 text-slate-50 py-2 px-4 rounded transition"
+                            onClick={handleIsLegalDeck}>
+                            Check Legal Deck
+                        </button>
+                    )}
+
+                    {isDeckLegal && (
+                        <div>
+                            <button
+                                type="button"
+                                className="bg-lime-400 text-slate-50 py-2 px-4 mr-2 rounded transition"
+                                onClick={() => handleDrawCardsFromDeck(1)}>
+                                +1 Card
+                            </button>
+                            <button
+                                type="button"
+                                className="bg-lime-400 text-slate-50 py-2 px-4 mx-2 rounded transition"
+                                onClick={() => handleDrawCardsFromDeck(5)}>
+                                +5 Cards
+                            </button>
+                            <button
+                                type="button"
+                                className="bg-lime-500 text-slate-50 py-2 px-4 mx-2 rounded transition"
+                                onClick={() => handleDrawCardsFromDeck(10)}>
+                                +10 Cards
+                            </button>
+                            <button
+                                type="button"
+                                className="bg-amber-300 text-slate-50 py-2 px-4 mx-2 rounded transition"
+                                onClick={handleShuffleDeck}>
+                                Shuffle Deck
+                            </button>
+                            <button
+                                type="button"
+                                className="bg-amber-300 text-slate-50 py-2 px-4 mx-2 rounded transition"
+                                onClick={handleNewTurn}>
+                                New Turn
+                            </button>
+                        </div>
+                    )}
                 </div>
             </form>
 
@@ -263,6 +275,13 @@ const RootPage = () => {
                         </tr>
                     </thead>
                     <tbody>
+                        <tr className={calculateRowColor()}>
+                            <td className="border px-4 py-2">0</td>
+                            <td className="border px-4 py-2">0</td>
+                            <td className="border px-4 py-2">0</td>
+                            <td className="border px-4 py-2">0</td>
+                            <td className="border px-4 py-2">1</td>
+                        </tr>
                         {turnStats.map((stat, index) => (
                             <tr key={index} className={calculateRowColor()}>
                                 <td className="border px-4 py-2">{stat.turn}</td>
@@ -284,17 +303,17 @@ const RootPage = () => {
                             <p>{card}</p> {/* Display the card */}
                             <div className="flex gap-2 mt-2">
                                 <button
-                                    className="bg-lime-600 text-slate-50 py-1 px-3 rounded transition"
+                                    className="bg-amber-300 text-slate-50 py-1 px-3 rounded transition"
                                     onClick={() => handleReturnToDeck(index)}>
                                     Return to Deck & Shuffle
                                 </button>
                                 <button
-                                    className="bg-orange-300 text-slate-50 py-1 px-3 rounded transition"
+                                    className="bg-amber-400 text-slate-50 py-1 px-3 rounded transition"
                                     onClick={() => handleReturnToBottomOfDeck(index)}>
                                     Return to Bottom of Deck
                                 </button>
                                 <button
-                                    className="bg-red-300 text-slate-50 py-1 px-3 rounded transition"
+                                    className="bg-red-400 text-slate-50 py-1 px-3 rounded transition"
                                     onClick={() => handleDiscardCard(index)}>
                                     Discard
                                 </button>
