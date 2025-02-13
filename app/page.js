@@ -163,6 +163,7 @@ const RootPage = () => {
 
     return (
         <div className="container mx-auto p-6  rounded-lg shadow-md">
+            <SpeedInsights />
             <form className="mb-6">
                 <textarea
                     className="border-2 border-gray-300 p-2 w-full rounded-lg mb-4"
